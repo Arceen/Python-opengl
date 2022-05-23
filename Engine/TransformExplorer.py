@@ -10,11 +10,12 @@ screen_width = 800
 screen_height = 600
 background_color = (0, 0, 0, 1)
 drawing_color = (1, 1, 1, 1)
+eye = [0, 0, 0]
 
 screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
 pygame.display.set_caption('Transformations in Python')
 cube = Cube(GL_LINE_LOOP)
-mesh = LoadMesh("cube.obj", GL_LINE_LOOP)
+mesh = LoadMesh("teapot.obj", GL_LINE_LOOP)
 
 def initialise():
     glClearColor(background_color[0], background_color[1], background_color[2], background_color[3])
@@ -25,21 +26,24 @@ def initialise():
     glLoadIdentity()
     gluPerspective(60, (screen_width / screen_height), 0.1, 500.0)
 
+def init_camera():
     # modelview
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     glViewport(0, 0, screen.get_width(), screen.get_height())
     glEnable(GL_DEPTH_TEST)
+    gluLookAt(eye[0], eye[1], eye[2], 0, 0, 0, 0, 1, 0)
 
 
 def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    init_camera()
     glPushMatrix()
     # glTranslated(0, 1, -5)
-    glScalef(0.5,0.5,0.5)
-    mesh.draw()
+    # glScalef(0.5,0.5,0.5)
+    # mesh.draw()
     # glTranslated(1, 1, -10)
-    glLoadIdentity()
+    # glLoadIdentity()
     mesh.draw()
     glPopMatrix()
 
@@ -50,7 +54,12 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_DOWN]:
+        eye[2] += 1
+    elif keys[pygame.K_UP]:
+        eye[2] -= 1
     display()
     pygame.display.flip()
-    pygame.time.wait(100)
+    # pygame.time.wait(100)
 pygame.quit()

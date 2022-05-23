@@ -18,7 +18,7 @@ screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPEN
 pygame.display.set_caption('OpenGL in Python')
 # mesh = Mesh()
 # cube = Cube(GL_LINE_LOOP)
-c = LoadMesh("granny.obj", GL_POLYGON)
+mesh = LoadMesh("teapot.obj", GL_POLYGON)
 
 def initialise():
     glClearColor(background_color[0], background_color[1], background_color[2], background_color[3])
@@ -31,17 +31,14 @@ def initialise():
 
     # modelview
     glMatrixMode(GL_MODELVIEW)
-    glTranslate(0, 0, -5)
     glLoadIdentity()
     glViewport(0, 0, screen.get_width(), screen.get_height())
     glEnable(GL_DEPTH_TEST)
-    glTranslate(0, -100, -200)
 
 
 def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    c.draw()
-    glRotatef(1, 10, 0, 1)
+    mesh.draw()
     glPushMatrix()
     glPopMatrix()
 
@@ -54,5 +51,5 @@ while not done:
             done = True
     display()
     pygame.display.flip()
-    pygame.time.wait(10);
+    # pygame.time.wait(10);
 pygame.quit()
